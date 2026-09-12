@@ -122,7 +122,7 @@ Do not spend a run discovering these.
 | `edges` | pairs of known `id`s |
 | `decisions` | 0–5; `chose` and `over` 1–20; `why` 0–50 |
 | `verification` | 0–5; `check` 1–28; `result` one of `pass`, `fail`, `skipped`, `unverified`; `detail` 0–20 |
-| `questions` | exactly 2 (configurable); `q` 1–98; `a` 1–200 |
+| `questions` | exactly 2 (configurable); `q` 1–98 (aim for at most 90 so the second row is not cut); `a` 1–200 |
 | characters | plain ASCII and Latin letters only; wide characters and emoji become `?` |
 
 Model answers (`a`) are never printed on the card.

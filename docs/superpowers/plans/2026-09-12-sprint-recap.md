@@ -33,6 +33,7 @@
 - **State dir override for tests.** `SPRINT_RECAP_HOME` env var overrides `~/.claude/sprint-recap` so tests never touch real state. Documented in the README.
 - **Empty repositories.** When HEAD does not exist (fresh `git init`), diffs are taken against git's well-known empty tree object so staged and committed files still count. The spec's "baseline lost" case only fires when a previously recorded head has disappeared.
 - **Flow wrap width.** The spec says flow rows wrap past 64 columns; every other section uses the 52-column body. Flow wraps at 52 so the gutter stays aligned.
+- **First-turn baseline.** `stamp-turn.js` seeds a missing state file with `sprint.baseline` set to the current git snapshot, while `render.js` seeds it with an empty baseline as spec §8 requires. The hook variant stops a pre-existing dirty tree from being blamed on the first turn.
 
 ## File Structure
 
@@ -1215,7 +1216,7 @@ module.exports = { layoutCard, flowRows, LayoutError };
 - [ ] **Step 5: Run the test to verify it passes**
 
 Run: `node --test plugins/sprint-recap/tests/layout.test.js`
-Expected: `ℹ pass 20`, `ℹ fail 0`.
+Expected: `ℹ pass 19`, `ℹ fail 0`.
 
 If the trim-order test fails at a specific step, print the rows for that budget (`console.log(rows.join('\n'))`) and compare against the spec's section 9 rather than loosening the assertion.
 

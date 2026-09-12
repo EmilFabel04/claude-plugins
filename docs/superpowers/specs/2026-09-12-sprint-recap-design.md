@@ -226,8 +226,8 @@ fits:
 
 Verification rows and questions are never trimmed. Worst case at every
 section 7 maximum before trimming: header 1, CHANGED 4 (top 3 plus more-row),
-FLOW 3, DECIDED 10, VERIFIED 5, CHECK 4, five blank separators, footer 1, total
-33. Step 2 alone brings that to 28, so the renderer never needs to fail. It
+FLOW 5, DECIDED 10, VERIFIED 5, CHECK 4, five blank separators, footer 1, total
+35 (39 with eight changed groups before step 1). Steps 1 and 2 bring the eight-group case to exactly 30, so the renderer never needs to fail. It
 still exits 1 with a clear message if a bug ever pushes it past all five steps,
 and a test asserts the maximum fixture fits.
 
