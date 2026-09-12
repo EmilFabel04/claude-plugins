@@ -31,6 +31,16 @@ test('rule 1: stop_hook_active allows even with a big change', () => {
   assert.equal(r.stdout, '');
 });
 
+test('stop_hook_active allows even when config.json is corrupt', () => {
+  const home = makeHome();
+  const repo = initRepo();
+  write(home, 'config.json', '{ not json');
+  const r = check(repo, home, { stop_hook_active: true });
+  assert.equal(r.status, 0);
+  assert.equal(r.stdout, '');
+  assert.equal(fs.existsSync(path.join(home, 'hook-errors.log')), false);
+});
+
 test('rule 2: no state file allows', () => {
   const repo = initRepo();
   bigChange(repo);
@@ -61,7 +71,9 @@ test('rule 3: one file with many lines blocks', () => {
   const { home, repo } = setup();
   write(repo, 'src/a.ts', Array.from({ length: 25 }, (_, i) => `l${i}`).join('\n') + '\n');
   const r = check(repo, home);
-  assert.equal(JSON.parse(r.stdout).decision, 'block');
+  const out = JSON.parse(r.stdout);
+  assert.equal(out.decision, 'block');
+  assert.match(out.reason, /^sprint-recap: 1 file \(\+25 -0\)/);
 });
 
 test('rule 4: recap already rendered allows', () => {

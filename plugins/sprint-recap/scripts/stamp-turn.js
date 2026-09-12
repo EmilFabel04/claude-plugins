@@ -18,12 +18,13 @@ function main() {
   try { st = state.readState(ctx.key); }
   catch (e) { state.logHookError('stamp-turn', e); st = null; }
 
-  const head = ctx.git ? gitlib.head(ctx.root) : null;
-  const baseline = ctx.git ? gitlib.snapshot(ctx.root, head) : {};
+  const skip = state.isHomeOrRoot(ctx.root);
+  const head = skip ? null : ctx.git ? gitlib.head(ctx.root) : null;
+  const baseline = skip ? {} : ctx.git ? gitlib.snapshot(ctx.root, head) : {};
   if (!st) st = state.freshState({ root: ctx.root, git: ctx.git, head, baseline, now });
 
   st.turn = { started_at: now.toISOString(), head, baseline, recap_rendered_at: null };
-  if (state.isHomeOrRoot(ctx.root)) st.turn.skip = true;
+  if (skip) st.turn.skip = true;
   state.writeState(ctx.key, st);
 }
 

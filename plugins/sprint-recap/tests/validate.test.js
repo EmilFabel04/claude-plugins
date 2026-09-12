@@ -60,6 +60,8 @@ test('verification limits and result enum', () => {
   assert.equal(fieldOf(() => validateRecap({ ...example(), verification: [{ check: 'a', result: 'ok' }] })), 'verification[0].result');
   assert.equal(fieldOf(() => validateRecap({ ...example(), verification: [{ check: 'x'.repeat(29), result: 'pass' }] })), 'verification[0].check');
   assert.equal(fieldOf(() => validateRecap({ ...example(), verification: [{ check: 'a', result: 'pass', detail: 'x'.repeat(21) }] })), 'verification[0].detail');
+  const six = Array.from({ length: 6 }, () => ({ check: 'a', result: 'pass' }));
+  assert.equal(fieldOf(() => validateRecap({ ...example(), verification: six })), 'verification');
 });
 
 test('questions must match the configured count', () => {
@@ -67,6 +69,7 @@ test('questions must match the configured count', () => {
   const three = [{ q: 'a?', a: 'b' }, { q: 'c?', a: 'd' }, { q: 'e?', a: 'f' }];
   assert.equal(validateRecap({ ...example(), questions: three }, { questions: 3 }).questions.length, 3);
   assert.equal(fieldOf(() => validateRecap({ ...example(), questions: [{ q: 'x'.repeat(99), a: 'b' }, { q: 'c?', a: 'd' }] })), 'questions[0].q');
+  assert.equal(fieldOf(() => validateRecap({ ...example(), questions: [{ q: 'a?', a: 'x'.repeat(201) }, { q: 'c?', a: 'd' }] })), 'questions[0].a');
 });
 
 test('strings are sanitized so wide characters become ?', () => {

@@ -32,5 +32,12 @@ test('loadConfig throws on a corrupt user file', () => {
   const home = makeHome();
   process.env.SPRINT_RECAP_HOME = home;
   write(home, 'config.json', '{ not json');
-  assert.throws(() => loadConfig(), SyntaxError);
+  assert.throws(() => loadConfig(), (e) => /^config\.json: /.test(e.message));
+});
+
+test('loadConfig rejects a non-integer value', () => {
+  const home = makeHome();
+  process.env.SPRINT_RECAP_HOME = home;
+  write(home, 'config.json', JSON.stringify({ width: '70' }));
+  assert.throws(() => loadConfig(), (e) => /config\.json: width must be a positive integer/.test(e.message));
 });

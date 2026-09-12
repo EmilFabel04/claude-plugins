@@ -67,6 +67,27 @@ test('unknown flag exits 1', () => {
   assert.match(r.stderr, /unknown flag --bogus/);
 });
 
+test('a corrupt user config is reported against config.json', () => {
+  const home = makeHome();
+  write(home, 'config.json', '{ nope');
+  const r = render(fixture('minimal.json'), { env: { SPRINT_RECAP_HOME: home } });
+  assert.equal(r.status, 1);
+  assert.match(r.stderr, /^sprint-recap: config\.json: /);
+});
+
+test('at the home directory the card has no CHANGED section', () => {
+  const home = makeHome();
+  const fakeHome = initRepo();
+  write(fakeHome, 'README.md', 'hello\nchanged\n');
+  const r = run('render.js', {
+    input: fixture('minimal.json'),
+    args: ['--cwd', fakeHome],
+    env: { SPRINT_RECAP_HOME: home, HOME: fakeHome },
+  });
+  assert.equal(r.status, 0, r.stderr);
+  assert.ok(!r.stdout.includes('CHANGED'));
+});
+
 test('--dry-run leaves state and history untouched', () => {
   const home = makeHome();
   const repo = initRepo();

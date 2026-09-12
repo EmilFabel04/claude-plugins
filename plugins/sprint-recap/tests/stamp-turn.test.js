@@ -51,6 +51,20 @@ test('home directory: turn.skip is set', () => {
   assert.equal(st.turn.skip, true);
 });
 
+test('home directory that is a git repo is not scanned', () => {
+  const home = makeHome();
+  const fakeHome = initRepo();
+  write(fakeHome, 'big.txt', Array.from({ length: 200 }, (_, i) => `line ${i}`).join('\n') + '\n');
+  const r = stamp(fakeHome, home, { HOME: fakeHome });
+  assert.equal(r.status, 0);
+  assert.equal(r.stdout, '');
+  process.env.SPRINT_RECAP_HOME = home;
+  const st = state.readState(state.resolveCwd(fakeHome).key);
+  assert.equal(st.turn.skip, true);
+  assert.deepEqual(st.turn.baseline, {});
+  assert.equal(st.turn.head, null);
+});
+
 test('a second prompt keeps the sprint and resets recap_rendered_at', () => {
   const home = makeHome();
   const repo = initRepo();

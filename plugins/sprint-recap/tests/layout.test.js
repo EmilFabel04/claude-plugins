@@ -73,10 +73,20 @@ test('CHANGED rows: path 18, bar 16 scaled to the largest, +added in 6, -removed
     { name: 'a-very-long-directory/name', files: 1, added: 1, removed: 0 },
   ] };
   const b = bodies(layoutCard({ recap: load('minimal.json'), changes, meta }), 'CHANGED');
-  assert.equal(b[0], 'src/app            ' + '█'.repeat(16) + '   +160   -8');
-  assert.equal(b[1], 'prisma             ' + '██' + ' '.repeat(14) + '    +20   -1');
+  assert.equal(b[0], 'src/app            ' + '█'.repeat(16) + '   +160    -8');
+  assert.equal(b[1], 'prisma             ' + '██' + ' '.repeat(14) + '    +20    -1');
   assert.ok(b[2].startsWith('a-very-long-direc…'));
   assert.equal(b[2].slice(19, 20), '█');
+});
+
+test('CHANGED rows never overflow their body even at very large counts', () => {
+  const changes = { git: true, groups: [{ name: 'huge', files: 1, added: 12345678, removed: 1234567 }] };
+  let rows;
+  assert.doesNotThrow(() => { rows = layoutCard({ recap: load('minimal.json'), changes, meta }); });
+  const b = bodies(rows, 'CHANGED');
+  assert.ok(width(b[0]) <= 52, b[0]);
+  assert.ok(b[0].includes('+12M'), b[0]);
+  assert.ok(b[0].includes('-1M'), b[0]);
 });
 
 test('CHANGED outside git shows file counts instead of bars', () => {

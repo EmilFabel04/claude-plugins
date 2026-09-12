@@ -36,10 +36,13 @@ function section(label, bodyList, g, secondLabel = '') {
   return bodyList.map((b, i) => row(i === 0 ? label : i === 1 ? secondLabel : '', b, g));
 }
 
-// Numbers that would overflow their column collapse to thousands.
+// Numbers that would overflow their column collapse to thousands, then to
+// millions if even the thousands form would still overflow.
 function num(n, w) {
   const s = String(n);
-  return s.length <= w - 1 ? s : `${Math.floor(n / 1000)}k`;
+  if (s.length <= w - 1) return s;
+  const k = `${Math.floor(n / 1000)}k`;
+  return k.length <= w - 1 ? k : `${Math.floor(n / 1e6)}M`;
 }
 
 function changedRows(changes, cap) {
@@ -49,7 +52,7 @@ function changedRows(changes, cap) {
   const out = shown.map((x) => {
     if (!changes.git) return `${fit(x.name, 18)} ${x.files} file${x.files === 1 ? '' : 's'}`;
     const bar = '█'.repeat(Math.max(1, Math.round(((x.added + x.removed) / max) * 16)));
-    return `${fit(x.name, 18)} ${fit(bar, 16)} ${padStart('+' + num(x.added, 6), 6)}${padStart('-' + num(x.removed, 5), 5)}`;
+    return `${fit(x.name, 18)} ${fit(bar, 16)} ${padStart('+' + num(x.added, 6), 6)} ${padStart('-' + num(x.removed, 5), 5)}`;
   });
   if (all.length > shown.length) out.push(`+${all.length - shown.length} more`);
   return out;

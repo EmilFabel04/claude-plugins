@@ -36,6 +36,10 @@ function measureSprint(cwd, now) {
     const head = ctx.git ? gitlib.head(ctx.root) : null;
     st = state.freshState({ root: ctx.root, git: ctx.git, head, baseline: {}, now });
   }
+  if (state.isHomeOrRoot(ctx.root)) {
+    const elapsed = elapsedLabel(st.sprint.started_at, now);
+    return { ctx, st, changes: null, meta: { elapsed, files: 0 } };
+  }
   const changes = measure(ctx.root, {
     git: st.git, head: st.sprint.head, baseline: st.sprint.baseline, started_at: st.sprint.started_at,
   });
@@ -44,12 +48,13 @@ function measureSprint(cwd, now) {
 }
 
 function commit({ ctx, st }, recap, changes, card, now) {
-  const head = st.git ? gitlib.head(ctx.root) : null;
-  const baseline = st.git ? gitlib.snapshot(ctx.root, head) : {};
+  const skip = state.isHomeOrRoot(ctx.root);
+  const head = skip ? null : st.git ? gitlib.head(ctx.root) : null;
+  const baseline = skip ? {} : st.git ? gitlib.snapshot(ctx.root, head) : {};
+  state.writeHistory({ rendered_at: now.toISOString(), cwd: ctx.root, recap, changes, card }, ctx.root, now);
   if (st.turn) st.turn.recap_rendered_at = now.toISOString();
   st.sprint = state.newSprint({ head, baseline, now });
   state.writeState(ctx.key, st);
-  state.writeHistory({ rendered_at: now.toISOString(), cwd: ctx.root, recap, changes, card }, ctx.root, now);
 }
 
 function main() {

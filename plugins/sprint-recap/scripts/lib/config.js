@@ -10,11 +10,23 @@ function baseDir() {
   return process.env.SPRINT_RECAP_HOME || path.join(os.homedir(), '.claude', 'sprint-recap');
 }
 
+const POSITIVE_INT_KEYS = ['minFiles', 'minLines', 'width', 'maxRows', 'questions'];
+
 function loadConfig() {
   const defaults = JSON.parse(fs.readFileSync(DEFAULTS_PATH, 'utf8'));
   const userPath = path.join(baseDir(), 'config.json');
-  const user = fs.existsSync(userPath) ? JSON.parse(fs.readFileSync(userPath, 'utf8')) : {};
-  return { ...defaults, ...user };
+  let user = {};
+  if (fs.existsSync(userPath)) {
+    try { user = JSON.parse(fs.readFileSync(userPath, 'utf8')); }
+    catch (e) { throw new Error(`config.json: ${e.message}`); }
+  }
+  const merged = { ...defaults, ...user };
+  for (const key of POSITIVE_INT_KEYS) {
+    if (!Number.isInteger(merged[key]) || merged[key] <= 0) {
+      throw new Error(`config.json: ${key} must be a positive integer`);
+    }
+  }
+  return merged;
 }
 
 module.exports = { baseDir, loadConfig, DEFAULTS_PATH };
