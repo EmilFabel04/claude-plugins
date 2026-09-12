@@ -1,0 +1,27 @@
+{
+  "description": "Sprint recap: stamp each turn, block the stop until a recap card has been rendered",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/stamp-turn.js\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/check-recap.js\"",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
+}
