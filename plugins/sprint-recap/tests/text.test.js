@@ -12,7 +12,7 @@ test('sanitize keeps ASCII and Latin letters, replaces wide and emoji with ?', (
 });
 
 test('sanitize normalises decomposed accents before checking', () => {
-  assert.equal(sanitize('é'), 'é');
+  assert.equal(sanitize('é'), 'é');
 });
 
 test('width counts code points', () => {
