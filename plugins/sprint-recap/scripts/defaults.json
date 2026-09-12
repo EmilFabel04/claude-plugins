@@ -1,0 +1,7 @@
+{
+  "minFiles": 2,
+  "minLines": 20,
+  "width": 70,
+  "maxRows": 30,
+  "questions": 2
+}

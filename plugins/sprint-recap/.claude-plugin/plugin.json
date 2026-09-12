@@ -1,0 +1,7 @@
+{
+  "name": "sprint-recap",
+  "version": "0.1.0",
+  "description": "One-screen visual sprint recap card with comprehension questions, enforced by a Stop hook",
+  "author": { "name": "Emil Fabel" },
+  "keywords": ["recap", "summary", "hooks", "terminal"]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "emil-plugins",
+  "description": "Emil's local Claude Code plugins",
+  "owner": { "name": "Emil Fabel" },
+  "plugins": [
+    {
+      "name": "sprint-recap",
+      "description": "One-screen visual sprint recap card with comprehension questions, enforced by a Stop hook",
+      "source": "./plugins/sprint-recap",
+      "version": "0.1.0",
+      "category": "productivity",
+      "tags": ["recap", "summary", "hooks"]
+    }
+  ]
+}

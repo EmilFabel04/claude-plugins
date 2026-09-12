@@ -1,0 +1,8 @@
+{
+  "name": "emil-plugins",
+  "private": true,
+  "description": "Local Claude Code plugin marketplace",
+  "scripts": {
+    "test": "node --test \"plugins/sprint-recap/tests/*.test.js\""
+  }
+}
