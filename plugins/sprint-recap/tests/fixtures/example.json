@@ -1,0 +1,20 @@
+{
+  "title": "Artefacts registry v1",
+  "components": [
+    { "id": "ui",  "label": "/artifacts page" },
+    { "id": "api", "label": "artefact router" },
+    { "id": "db",  "label": "Artefact model" }
+  ],
+  "edges": [["ui", "api"], ["api", "db"]],
+  "decisions": [
+    { "chose": "polymorphic table", "over": "one table per type", "why": "single list query" }
+  ],
+  "verification": [
+    { "check": "vitest artefacts", "result": "pass", "detail": "14/14" },
+    { "check": "manual click-through", "result": "skipped" }
+  ],
+  "questions": [
+    { "q": "Which layer decides an artefact's type?", "a": "the router, from the agent payload" },
+    { "q": "Why one table instead of one per type?", "a": "single list query for the registry" }
+  ]
+}
