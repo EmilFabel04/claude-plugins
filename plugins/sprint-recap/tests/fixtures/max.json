@@ -1,0 +1,30 @@
+{
+  "title": "Artefacts registry v1 final!",
+  "components": [
+    { "id": "c1", "label": "artefacts list page UI" },
+    { "id": "c2", "label": "artefact router module" },
+    { "id": "c3", "label": "artefact prisma model!" },
+    { "id": "c4", "label": "session resume service" },
+    { "id": "c5", "label": "agent payload adapters" },
+    { "id": "c6", "label": "typed deliverable view" }
+  ],
+  "edges": [["c1", "c2"], ["c2", "c3"], ["c3", "c4"], ["c4", "c5"], ["c5", "c6"]],
+  "decisions": [
+    { "chose": "polymorphic table !!", "over": "one table per type !", "why": "single list query keeps the registry page simple!!" },
+    { "chose": "polymorphic table !!", "over": "one table per type !", "why": "single list query keeps the registry page simple!!" },
+    { "chose": "polymorphic table !!", "over": "one table per type !", "why": "single list query keeps the registry page simple!!" },
+    { "chose": "polymorphic table !!", "over": "one table per type !", "why": "single list query keeps the registry page simple!!" },
+    { "chose": "polymorphic table !!", "over": "one table per type !", "why": "single list query keeps the registry page simple!!" }
+  ],
+  "verification": [
+    { "check": "vitest artefacts full suite!", "result": "pass", "detail": "14/14 passed locally" },
+    { "check": "vitest artefacts full suite!", "result": "fail", "detail": "14/14 passed locally" },
+    { "check": "vitest artefacts full suite!", "result": "skipped", "detail": "14/14 passed locally" },
+    { "check": "vitest artefacts full suite!", "result": "unverified", "detail": "14/14 passed locally" },
+    { "check": "vitest artefacts full suite!", "result": "pass", "detail": "14/14 passed locally" }
+  ],
+  "questions": [
+    { "q": "Why does the router own artefact type detection instead of the Prisma model or the page component?", "a": "The router sees the agent payload first and the model must stay storage-only." },
+    { "q": "Why did we keep one polymorphic table instead of one table per artefact type, given the tradeoffs?", "a": "One list query for the registry page; per-type tables would need a union." }
+  ]
+}
