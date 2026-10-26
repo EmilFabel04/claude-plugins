@@ -9,7 +9,7 @@ Design: `docs/superpowers/specs/2026-09-12-sprint-recap-design.md`.
 ## Install
 
 ```bash
-claude plugin marketplace add ~/Claude/claude-plugins
+claude plugin marketplace add EmilFabel04/claude-plugins   # or a path to a local clone
 claude plugin install sprint-recap@emil-plugins
 ```
 
