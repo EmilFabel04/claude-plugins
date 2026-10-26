@@ -231,3 +231,7 @@ plugins/sprint-recap/
 
 The plugin's [README](plugins/sprint-recap/README.md) has the renderer flag
 reference, the state file layout and a manual smoke test.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
